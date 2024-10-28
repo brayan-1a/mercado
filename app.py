@@ -1,5 +1,5 @@
-# app.py
 import streamlit as st
+import supabase
+import pickle
+import numpy as np
 
-st.title("Bienvenido a la Aplicación de Mercado")
-st.write("¡Bienvenido a mi aplicación!")
