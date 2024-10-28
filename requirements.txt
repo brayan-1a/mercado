@@ -1,7 +1,7 @@
 streamlit
 pandas
 sqlalchemy
-tensorflow
 scikit-learn
 numpy
 supabase-py
+
