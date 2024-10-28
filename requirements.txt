@@ -4,3 +4,4 @@ sqlalchemy
 tensorflow
 scikit-learn
 numpy
+supabase-py
