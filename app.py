@@ -1,8 +1,7 @@
 import streamlit as st
-import supabase
-import pickle
-import numpy as np
+from supabase import create_client
 
-# Cargar el modelo
-with open("modelo.pkl", "rb") as file:
-    modelo = pickle.load(file)
+# Configuración de Supabase
+url = "https://odlosqyzqrggrhvkdovj.supabase.co"  # Reemplaza con tu URL
+key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kbG9zcXl6cXJnZ3Jodmtkb3ZqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMDA2ODI4OSwiZXhwIjoyMDQ1NjQ0Mjg5fQ.h-pFrlUWOwEQpKNVZKm04SXflfG6q7KNH0hov9XZxvI"  # Reemplaza con tu API key
+supabase = create_client(url, key)
