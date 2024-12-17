@@ -135,10 +135,35 @@ elif page == "Consultar Predicciones":
             # Realizar la predicción con el modelo cargado
             prediccion = model.predict([caracteristicas])
 
-            # Mostrar el resultado
-            st.write(f"Recomendación: Comprar {round(prediccion[0], 2)} unidades de {producto_seleccionado}")
+            # Redondear la predicción a entero
+            unidades_predichas = round(prediccion[0])  # O también puedes usar `int(prediccion[0])`
+
+            # Convertir unidades a kilos
+            def unidades_a_kilos(producto, unidades):
+                if producto == "zanahoria":
+                    kilos = unidades / 2.5  # Promedio entre 2-3 zanahorias
+                elif producto == "cebolla":
+                    kilos = unidades / 3.5  # Promedio entre 3-4 cebollas
+                elif producto == "lechuga":
+                    kilos = unidades / 2.5  # Promedio entre 2-3 lechugas
+                elif producto == "pepino":
+                    kilos = unidades / 2.5  # Promedio entre 2-3 pepinos
+                elif producto == "tomate":
+                    kilos = unidades / 5.5  # Promedio entre 5-6 tomates
+                else:
+                    kilos = unidades  # Por defecto si no hay especificación
+                return kilos
+
+            kilos_predichos = unidades_a_kilos(producto_seleccionado, unidades_predichas)
+
+            # Mostrar los tres resultados
+            st.write(f"Predicción (en unidades): {prediccion[0]:.2f} unidades de {producto_seleccionado}")
+            st.write(f"Predicción (en unidades redondeadas): {unidades_predichas} unidades de {producto_seleccionado}")
+            st.write(f"Predicción (en kilos): {kilos_predichos:.2f} kilos de {producto_seleccionado}")
+
         except Exception as e:
             st.error(f"Error al realizar la predicción: {e}")
+
 
 
 
