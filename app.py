@@ -46,7 +46,7 @@ if page == "Consultar Predicciones":
     promocion = st.checkbox("¿Promoción activa?")
 
     # Ruta del modelo guardado en una ubicación conocida localmente
-    model_path = "models/random_forest_model.pkl"
+    model_path = "https://odlosqyzqrggrhvkdovj.supabase.co/storage/v1/object/public/models/random_forest_model.pkl"
 
     # Cargar el modelo guardado localmente
     if os.path.exists(model_path):
