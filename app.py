@@ -2,6 +2,8 @@ import streamlit as st
 import joblib
 import requests
 import io
+import plotly.express as px
+import pandas as pd
 from config import MODEL_URL  # Importamos la URL del modelo desde config.py
 from config import get_supabase_client
 from preprocess import load_and_select_data, clean_data, add_features
@@ -31,10 +33,43 @@ target_col = "inventario_final"
 
 # Pestañas de navegación
 st.sidebar.title("Navegación")
-page = st.sidebar.radio("Selecciona una pestaña", ["Consultar Predicciones"])
+page = st.sidebar.radio("Selecciona una pestaña", ["Análisis de Datos", "Consultar Predicciones"])
 
-# Pestaña 1: Consultar Predicciones
-if page == "Consultar Predicciones":
+# Pestaña 1: Análisis de Datos
+if page == "Análisis de Datos":
+    st.header("Análisis de Datos")
+
+    # Mostrar los datos seleccionados
+    st.subheader("Datos Crudos")
+    st.dataframe(df)
+
+    # Mostrar datos limpios y con características
+    st.subheader("Datos Limpiados y Características Agregadas")
+    st.dataframe(df_features)
+
+    # Mostrar resumen estadístico
+    st.subheader("Resumen Estadístico")
+    st.write(df_features.describe())
+
+    # Gráficos Interactivos
+    st.subheader("Visualización de Datos")
+
+    # Gráfico de barras para el stock inicial por producto
+    fig_stock = px.bar(df_features, x="producto", y="inventario_inicial", title="Stock Inicial por Producto")
+    st.plotly_chart(fig_stock)
+
+    # Gráfico de líneas para evolución del inventario final
+    fig_inventario = px.line(df_features, x="fecha", y="inventario_final", color="producto",
+                             title="Evolución del Inventario Final por Producto")
+    st.plotly_chart(fig_inventario)
+
+    # Gráfico de dispersión para desperdicio vs cantidad vendida
+    fig_dispersion = px.scatter(df_features, x="cantidad_vendida", y="desperdicio", color="producto",
+                                title="Relación entre Cantidad Vendida y Desperdicio")
+    st.plotly_chart(fig_dispersion)
+
+# Pestaña 2: Consultar Predicciones
+elif page == "Consultar Predicciones":
     st.header("Consultar Predicciones")
 
     # Seleccionar producto
@@ -76,6 +111,7 @@ if page == "Consultar Predicciones":
             st.write(f"Recomendación: Comprar {round(prediccion[0], 2)} unidades de {producto_seleccionado}")
         except Exception as e:
             st.error(f"Error al realizar la predicción: {e}")
+
 
 
 
