@@ -1,7 +1,11 @@
 streamlit
 pandas
-sqlalchemy
+supabase
 scikit-learn
+joblib
+matplotlib
 numpy
-supabase-py
+plotly
+python-dotenv
+
 
