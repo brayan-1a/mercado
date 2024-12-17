@@ -94,11 +94,11 @@ elif page == "2. Modelo Predictivo":
     # **2.3. Evaluación del Modelo**
     st.subheader("2.3. Evaluación del Modelo")
     st.write("""
-    - Se evaluaron los modelos utilizando métricas como **MAE**, **RMSE** y **R²**.
+    - Se evaluaron los modelos utilizando métricas como **MAE**, **RMSE** y **R2**.
     - Las métricas del modelo Random Forest fueron:
         - **MAE**: 1.6275
         - **RMSE**: 2.14
-        - **R²**: 0.98
+        - **R2**: 0.98
     """)
 
     # Gráfico de barras para el stock inicial por producto
