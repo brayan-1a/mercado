@@ -1,7 +1,8 @@
 import streamlit as st
 import joblib
+import os
 import requests
-import numpy as np
+
 from config import get_supabase_client
 from preprocess import load_and_select_data, clean_data, add_features
 
@@ -15,7 +16,7 @@ selected_columns = [
     "desperdicio", "condiciones_climaticas", "ventas_por_hora"
 ]
 
-# Cargar los datos
+# Cargar y preparar datos
 st.title("Gestión de Stock con Predicción")
 df = load_and_select_data(supabase, "verduras", selected_columns)
 df_clean = clean_data(df)
@@ -44,10 +45,18 @@ if page == "Consultar Predicciones":
     cantidad_actual = st.number_input("Cantidad actual en stock:", min_value=0, value=int(producto_data["inventario_final"].iloc[0]))
     promocion = st.checkbox("¿Promoción activa?")
 
-    # Cargar el modelo desde Supabase Storage
-    model_url = "https://odlosqyzqrggrhvkdovj.supabase.co/storage/v1/object/public/models/random_forest_model.pkl"
-    model_data = requests.get(model_url).content
-    model = joblib.load(model_data)
+    # Ruta del modelo guardado en una ubicación conocida localmente
+    model_path = "models/random_forest_model.pkl"
+
+    # Cargar el modelo guardado localmente
+    if os.path.exists(model_path):
+        try:
+            model = joblib.load(model_path)
+            st.success(f"Modelo Random Forest cargado exitosamente desde {model_path}.")
+        except Exception as e:
+            st.error(f"Error al cargar el modelo: {e}")
+    else:
+        st.error(f"No se encontró el archivo {model_path}. Asegúrate de haber guardado correctamente el modelo.")
 
     # Hacer la predicción
     if st.button("Predecir"):
@@ -70,6 +79,7 @@ if page == "Consultar Predicciones":
             st.write(f"Recomendación: Comprar {round(prediccion[0], 2)} unidades de {producto_seleccionado}")
         except Exception as e:
             st.error(f"Error al realizar la predicción: {e}")
+
 
 
 
