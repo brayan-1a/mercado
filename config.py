@@ -7,3 +7,6 @@ KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9k
 def get_supabase_client():
     """Crea y devuelve una instancia del cliente Supabase."""
     return create_client(URL, KEY)
+
+# URL del modelo guardado en Supabase Storage
+MODEL_URL = "https://odlosqyzqrggrhvkdovj.supabase.co/storage/v1/object/public/models/random_forest_model.pkl"

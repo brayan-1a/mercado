@@ -2,6 +2,7 @@ import streamlit as st
 import joblib
 import requests
 import io
+from config import MODEL_URL  # Importamos la URL del modelo desde config.py
 from config import get_supabase_client
 from preprocess import load_and_select_data, clean_data, add_features
 
@@ -44,12 +45,9 @@ if page == "Consultar Predicciones":
     cantidad_actual = st.number_input("Cantidad actual en stock:", min_value=0, value=int(producto_data["inventario_final"].iloc[0]))
     promocion = st.checkbox("¿Promoción activa?")
 
-    # Cargar el modelo desde Supabase Storage
-    model_url = "https://odlosqyzqrggrhvkdovj.supabase.co/storage/v1/object/public/models/random_forest_model.pkl"
-    
-    # Descargar el archivo del modelo
+    # Cargar el modelo desde Supabase Storage usando la URL desde config.py
     try:
-        response = requests.get(model_url)
+        response = requests.get(MODEL_URL)  # Usamos la URL del modelo desde config.py
         response.raise_for_status()  # Lanza un error si la respuesta no es 200
         model_data = io.BytesIO(response.content)
         model = joblib.load(model_data)
@@ -78,6 +76,7 @@ if page == "Consultar Predicciones":
             st.write(f"Recomendación: Comprar {round(prediccion[0], 2)} unidades de {producto_seleccionado}")
         except Exception as e:
             st.error(f"Error al realizar la predicción: {e}")
+
 
 
 
