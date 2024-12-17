@@ -75,14 +75,26 @@ if page == "Análisis de Datos":
         title=f"Evolución del Inventario Final - {producto_seleccionado_grafico}",
         markers=True  # Agregar puntos en las líneas para mayor claridad
     )
-
-    # Mostrar el gráfico
     st.plotly_chart(fig_inventario)
 
-    # Gráfico de dispersión para desperdicio vs cantidad vendida
-    fig_dispersion = px.scatter(df_features, x="cantidad_vendida", y="desperdicio", color="producto",
-                                title="Relación entre Cantidad Vendida y Desperdicio")
-    st.plotly_chart(fig_dispersion)
+    # Gráfico de barras agrupadas: Promedio de Cantidad Vendida y Desperdicio por Producto
+    st.subheader("Promedio de Cantidad Vendida y Desperdicio por Producto")
+
+    # Calcular promedios
+    df_resumen = df_features.groupby("producto")[["cantidad_vendida", "desperdicio"]].mean().reset_index()
+
+    # Crear gráfico de barras agrupadas
+    fig_resumen = px.bar(
+        df_resumen, 
+        x="producto", 
+        y=["cantidad_vendida", "desperdicio"], 
+        barmode="group", 
+        title="Comparación Promedio: Cantidad Vendida vs Desperdicio",
+        labels={"value": "Promedio", "variable": "Métrica"}
+    )
+
+    # Mostrar el gráfico
+    st.plotly_chart(fig_resumen)
 
 # Pestaña 2: Consultar Predicciones
 elif page == "Consultar Predicciones":
@@ -127,6 +139,7 @@ elif page == "Consultar Predicciones":
             st.write(f"Recomendación: Comprar {round(prediccion[0], 2)} unidades de {producto_seleccionado}")
         except Exception as e:
             st.error(f"Error al realizar la predicción: {e}")
+
 
 
 
