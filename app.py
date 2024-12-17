@@ -58,9 +58,25 @@ if page == "Análisis de Datos":
     fig_stock = px.bar(df_features, x="producto", y="inventario_inicial", title="Stock Inicial por Producto")
     st.plotly_chart(fig_stock)
 
-    # Gráfico de líneas para evolución del inventario final
-    fig_inventario = px.line(df_features, x="fecha", y="inventario_final", color="producto",
-                             title="Evolución del Inventario Final por Producto")
+    # Gráfico interactivo de líneas para la evolución del inventario final
+    st.subheader("Evolución del Inventario Final por Producto")
+
+    # Agregar un filtro para seleccionar un producto
+    producto_seleccionado_grafico = st.selectbox("Selecciona un producto para ver su evolución:", df_features["producto"].unique())
+
+    # Filtrar los datos solo para el producto seleccionado
+    df_producto = df_features[df_features["producto"] == producto_seleccionado_grafico]
+
+    # Crear el gráfico de líneas solo para el producto seleccionado
+    fig_inventario = px.line(
+        df_producto, 
+        x="fecha", 
+        y="inventario_final", 
+        title=f"Evolución del Inventario Final - {producto_seleccionado_grafico}",
+        markers=True  # Agregar puntos en las líneas para mayor claridad
+    )
+
+    # Mostrar el gráfico
     st.plotly_chart(fig_inventario)
 
     # Gráfico de dispersión para desperdicio vs cantidad vendida
@@ -111,6 +127,7 @@ elif page == "Consultar Predicciones":
             st.write(f"Recomendación: Comprar {round(prediccion[0], 2)} unidades de {producto_seleccionado}")
         except Exception as e:
             st.error(f"Error al realizar la predicción: {e}")
+
 
 
 
